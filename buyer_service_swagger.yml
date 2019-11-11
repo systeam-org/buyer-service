@@ -1,0 +1,180 @@
+openapi: 3.0.0
+info:
+    title: API
+    description: Rest API for buyer portal
+    version: 0.1.0
+
+servers:
+    - url: buyerapi.systeambiz.com
+      description: API endpoint
+
+paths:
+    /categories:
+        get:
+            summary: get list of categories
+            responses:
+                '200':
+                    description: Returns list of categories
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                  type: string
+
+    /products:
+        get:
+            summary: get list of all products or get list of products of given category if category is provided
+            parameters:
+                - in: query
+                  name: category
+                  required: false
+                  schema:
+                      type: string
+                  description: pass category name
+            responses:
+                '200':
+                    description: Return list of products
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: object
+                                    properties:
+                                        product_id:
+                                            type: integer
+                                        category_name:
+                                            type: string
+                                        product_name:
+                                            type: string
+                                        description:
+                                            type: string
+                                        price:
+                                            type: integer
+                                        image:
+                                            type: string
+
+    /placeorder:
+        post:
+            summary: To place an order with provided values
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                total_amount:
+                                    type: integer
+                                created_on:
+                                    type: string
+                                    format: date-time
+                                email:
+                                    type: string
+                                products:
+                                    type: array
+                                    items:
+                                        type: object
+                                        properties:
+                                            product_name:
+                                                type: string
+                                            product_id:
+                                                type: integer
+                                            quantity:
+                                                type: integer
+                                            unit_cost:
+                                                type: integer
+            responses:
+                '200':
+                    description: returns order is successful
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    order_id:
+                                        type: integer
+    /orders:
+        get:
+            summary: To get list of orders
+            parameters:
+                - in: query
+                  name: email
+                  schema:
+                      type: string
+                  description: pass user email
+
+            responses:
+                '200':
+                    description: Returns list of orders
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: object
+                                    properties:
+                                        order_id:
+                                            type: integer
+                                        total_amount:
+                                            type: integer
+                                        created_on:
+                                            type: string
+                                            format: date-time
+                                        status:
+                                            type: string
+                                        products:
+                                          type: array
+                                          items:
+                                              type: object
+                                              properties:
+                                                  product_name:
+                                                      type: string
+                                                  product_id:
+                                                      type: integer
+                                                  quantity:
+                                                      type: integer
+                                                  unit_cost:
+                                                      type: integer
+
+    /user:
+        get:
+            summary: To get user info from database. Based on role value allow access
+            parameters:
+                - in: query
+                  name: email
+                  schema:
+                      type: string
+                  description: pass user email
+
+            responses:
+                '200':
+                    description: Returns user info
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    role:
+                                        type: integer
+                '404':
+                    description: user not found
+        post:
+            summary: To add user or to update user role
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                first_name:
+                                    type: string
+                                last_name:
+                                    type: string
+                                email:
+                                    type: string
+                                token:
+                                    type: string
+            responses:
+                '200':
+                    description: returns if operation is successful
