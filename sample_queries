@@ -1,0 +1,7 @@
+insert into systeam_ecommerce.category (category_name) values ('Women')
+
+insert into systeam_ecommerce.products (category_name, email, product_name, description, price, available_quantity, image ) values ('Women','amit.vijapure','Bat','used for playing', 20,100, 'abc.com')
+
+insert into systeam_ecommerce.users (first_name, last_name, email,token, role) values ('Amit','Vijapure','amit.vijapure','fdfd', 'Buyer')
+
+Insert into systeam_ecommerce.orders (total_amount, created_on, status, email)  values (12, '2019-10-10 12:12:12','Ordered','amit.vijapure' )
