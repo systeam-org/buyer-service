@@ -55,14 +55,14 @@ def place_order(body):
     conn= get_connection()
     cursor = conn.cursor()
 
-    sql = "Insert into systeam_ecommerce.orders (total_amount, created_on, status, email)  values (%s, %s,%s,%s )"
+    sql = "Insert into orders (total_amount, created_on, status, email)  values (%s, %s,%s,%s )"
     values = (body['total_amount'], body['created_on'], 'Ordered', body['email'])
     rows = cursor.execute(sql, values)
 
     order_id = cursor.lastrowid
 
     for row in body['products']:
-        sql = "Insert into systeam_ecommerce.order_details (product_id, order_id, product_name, quantity, unit_cost)  values (%s, %s, %s, %s, %s)"
+        sql = "Insert into order_details (product_id, order_id, product_name, quantity, unit_cost)  values (%s, %s, %s, %s, %s)"
         values = (row['product_id'], order_id, row['product_name'], row['quantity'], row['unit_cost'])
         rows = cursor.execute(sql, values)
 
@@ -149,14 +149,14 @@ def add_or_update_user(body):
     cursor = conn.cursor()
 
     if not current_role:
-        sql = "Insert into systeam_ecommerce.users (first_name, last_name, email, token, role)  values (%s, %s,%s, %s,%s)"
+        sql = "Insert into users (first_name, last_name, email, token, role)  values (%s, %s,%s, %s,%s)"
         values = (body['first_name'], body['last_name'],  body['email'], body['token'], 'Buyer')
         rows = cursor.execute(sql, values)
     elif current_role == 'Seller':
-        sql = "Update systeam_ecommerce.users SET role = 'Buyer-Seller' , token = '" + body['token'] +"' where email = '" +body['email']+ "'"
+        sql = "Update users SET role = 'Buyer-Seller' , token = '" + body['token'] +"' where email = '" +body['email']+ "'"
         rows = cursor.execute(sql)
     elif current_role == 'Buyer' or current_role == 'Buyer-Seller':
-        sql = "Update systeam_ecommerce.users SET token = '" + body['token'] +"' where email = '" +body['email']+ "'"
+        sql = "Update users SET token = '" + body['token'] +"' where email = '" +body['email']+ "'"
         rows = cursor.execute(sql)
 
     conn.commit()
