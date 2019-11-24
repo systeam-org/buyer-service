@@ -13,7 +13,7 @@ def get_categories():
 
 @app.route('/products', methods=['GET'])
 def get_products():
-    result = operations.get_products(request.values.get('category'))
+    result = operations.get_products(category=None)
     return Response(json.dumps(result), mimetype='application/json', status=200)
 
 @app.route('/placeorder', methods=['POST'])

@@ -13,6 +13,7 @@ def get_connection():
     if not cnx:
         cnx = mysql.connector.connect(user = 'root', password='Admin@123', host='localhost', database = 'systeam_ecommerce',
                               auth_plugin='mysql_native_password')
+        cnx.autocommit = True
     return cnx
 
 def get_categories():
