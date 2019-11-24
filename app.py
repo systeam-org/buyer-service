@@ -21,8 +21,6 @@ def place_order():
     result = operations.place_order(body)
     return Response(json.dumps(result), mimetype='application/json', status=200)
 
-
-
 @app.route('/orders', methods=['GET'])
 def get_orders():
     result = operations.get_orders(request.values.get('email'))
@@ -37,6 +35,10 @@ def get_user():
         return Response({}, mimetype='application/json', status=404)
 
 
+@app.route('/hello', methods=['GET'])
+def hello():
+    return Response({"Hello world"}, mimetype='application/json', status=200)
+
 @app.route('/user', methods=['POST'])
 def add_or_update_user():
     body = json.loads(request.data)
@@ -45,4 +47,4 @@ def add_or_update_user():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=80)
+    app.run(debug=True, host='0.0.0.0', port=81)

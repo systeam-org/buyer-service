@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buyer-service-deployment
+  labels:
+    app: buyer-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: buyer-service
+  template:
+    metadata:
+      labels:
+        app: buyer-service
+    spec:
+      containers:
+      - name: buyer-service
+        image: systeamorg/buyer-service
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 81
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: buyer-service
+  labels:
+    app: buyer-service
+spec:
+  ports:
+  - port: 81
+    targetPort: 81
+    protocol: TCP
+    name: tcp
+    nodePort: 30081
+  type: NodePort
+  selector:
+    app: buyer-service

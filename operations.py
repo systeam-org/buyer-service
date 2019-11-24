@@ -1,5 +1,10 @@
 import mysql.connector
 import os
+from stompest.config import StompConfig
+from stompest.sync import Stomp
+from stompest.protocol import StompSpec
+import socket
+
 cnx = None
 
 def get_connection():
@@ -63,10 +68,31 @@ def place_order(body):
 
     conn.commit()
 
+    queue = '/queue/ordered'
+    amq_conf = None
+    if isOpen('activemq.default', 61612):
+        amq_conf = StompConfig('tcp://activemq.default:61612')
+    else:
+        amq_conf = StompConfig('tcp://localhost:30012')
+    try:
+        client = Stomp(amq_conf)
+        client.connect()
+        client.send(queue, str(order_id).encode())
+        client.disconnect()
+    except:
+        print("something went wrong")
 
-    #TODO send to messageing service
     return {'order_id': order_id}
 
+
+def isOpen(dns,port):
+   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+   try:
+      s.connect((dns, int(port)))
+      s.shutdown(2)
+      return True
+   except:
+      return False
 
 def get_orders(email):
 

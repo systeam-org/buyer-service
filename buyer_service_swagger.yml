@@ -156,7 +156,7 @@ paths:
                                 type: object
                                 properties:
                                     role:
-                                        type: integer
+                                        type: string
                 '404':
                     description: user not found
         post:
