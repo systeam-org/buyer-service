@@ -3,6 +3,7 @@ from flask import request,Flask, Response
 from flask_cors import CORS
 import operations
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/categories', methods=['GET'])
 def get_categories():
