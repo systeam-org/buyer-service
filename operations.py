@@ -11,24 +11,25 @@ cnx = None
 def get_connection():
     global cnx
 
-    if not cnx:
-        try:
-            cnx = mysql.connector.connect(user=Constants.LOCAL_DATABASE_USER,
-                                          password=Constants.LOCAL_DATABASE_PASSWORD,
-                                          host=Constants.LOCAL_DATABASE_ENDPOINT,
-                                          database=Constants.LOCAL_DATABASE_NAME,
-                                          auth_plugin='mysql_native_password')
-        except:
-            cnx = mysql.connector.connect(user=Constants.PRODUCTION_DATABASE_USER,
-                                          password=Constants.PRODUCTION_DATABASE_PASSWORD,
-                                          host=Constants.PRODUCTION_DATABASE_ENDPOINT,
-                                          database=Constants.PRODUCTION_DATABASE_NAME,
-                                          auth_plugin='mysql_native_password')
-        cnx.autocommit = True
+
+    try:
+        cnx = mysql.connector.connect(user=Constants.LOCAL_DATABASE_USER,
+                                      password=Constants.LOCAL_DATABASE_PASSWORD,
+                                      host=Constants.LOCAL_DATABASE_ENDPOINT,
+                                      database=Constants.LOCAL_DATABASE_NAME,
+                                      auth_plugin='mysql_native_password')
+    except:
+        cnx = mysql.connector.connect(user=Constants.PRODUCTION_DATABASE_USER,
+                                      password=Constants.PRODUCTION_DATABASE_PASSWORD,
+                                      host=Constants.PRODUCTION_DATABASE_ENDPOINT,
+                                      database=Constants.PRODUCTION_DATABASE_NAME,
+                                      auth_plugin='mysql_native_password')
+    cnx.autocommit = True
     return cnx
 
 def get_categories():
-    cursor = get_connection().cursor()
+    conn = get_connection()
+    cursor = conn.cursor()
     cursor.execute("SELECT category_name FROM category")
     rows = cursor.fetchall()
 
@@ -36,11 +37,13 @@ def get_categories():
 
     for row in rows:
         result.append(row[0])
+    conn.close()
     return result
 
 
 def get_products(category):
-    cursor = get_connection().cursor()
+    conn = get_connection()
+    cursor = conn.cursor()
 
     if category:
         cursor.execute("SELECT * FROM products where category_name = '" + category + "'")
@@ -59,6 +62,7 @@ def get_products(category):
         product['price'] = row[5]
         product['image'] = row[7]
         result.append(product)
+    conn.close()
     return result
 
 
@@ -82,10 +86,10 @@ def place_order(body):
 
     queue = '/queue/ordered'
     amq_conf = None
-    if isOpen('activemq.default', 61612):
-        amq_conf = StompConfig('tcp://activemq.default:61612')
-    else:
-        amq_conf = StompConfig('tcp://localhost:30012')
+#    if isOpen('activemq-service.default', 61613):
+    amq_conf = StompConfig('tcp://activemq-service.default:61613')
+    #else:
+    #    amq_conf = StompConfig('tcp://localhost:30012')
     try:
         client = Stomp(amq_conf)
         client.connect()
@@ -93,7 +97,7 @@ def place_order(body):
         client.disconnect()
     except:
         print("something went wrong")
-
+    conn.close()
     return {'order_id': order_id}
 
 
@@ -108,7 +112,8 @@ def isOpen(dns,port):
 
 def get_orders(email):
 
-    cursor = get_connection().cursor()
+    conn = get_connection()
+    cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM orders join order_details on orders.order_id = order_details.order_id where orders.email = '" + email + "'")
 
@@ -138,15 +143,18 @@ def get_orders(email):
         for i in range(len(result)):
             if result[i]['order_id'] == order_id:
                 result[i]['products'].append(product)
+    conn.close()
     return result
 
 
 def get_user(email):
-    cursor = get_connection().cursor()
+    conn = get_connection()
+    cursor = conn.cursor()
     cursor.execute("SELECT role FROM users where email = '"+email+"'")
     rows = cursor.fetchall()
-
+    conn.close()
     if len(rows) < 1:
+
         return None
     else:
         return {'role': rows[0][0]}
@@ -172,5 +180,5 @@ def add_or_update_user(body):
         rows = cursor.execute(sql)
 
     conn.commit()
-
+    conn.close()
     return True
