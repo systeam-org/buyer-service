@@ -59,7 +59,7 @@ def get_products(category):
         product['category_name'] = row[1]
         product['product_name'] = row[3]
         product['description'] = row[4]
-        product['price'] = "$" + str(row[5])
+        product['price'] = row[5]
         product['image'] = row[7]
         result.append(product)
     conn.close()
