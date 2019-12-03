@@ -46,6 +46,11 @@ def add_or_update_user():
     result = operations.add_or_update_user(body)
     return Response(json.dumps({}), mimetype='application/json', status=200)
 
+@app.route('/payment', methods=['POST'])
+def make_payment():
+    body = json.loads(request.data)
+    result = operations.make_payment(body)
+    return Response(json.dumps(result), mimetype='application/json', status=200)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=81)

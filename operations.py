@@ -5,6 +5,7 @@ from stompest.sync import Stomp
 from stompest.protocol import StompSpec
 import socket
 import Constants
+import stripe
 
 cnx = None
 
@@ -182,3 +183,13 @@ def add_or_update_user(body):
     conn.commit()
     conn.close()
     return True
+
+def make_payment(body):
+    stripe.api_key = 'sk_test_tWCcBUnrUGKL17D6tF8blKG700rq7lNVMS'
+    charge = stripe.Charge.create(
+        amount=body['amount'],
+        currency='usd',
+        description=body['description'],
+        source='tok_visa'
+    )
+    return charge
