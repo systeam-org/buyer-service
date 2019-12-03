@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: buyer-service
-        image: systeamorg/buyer-service
+        image: systeamorg/buyer-service:latest
         ports:
         - containerPort: 81
 
