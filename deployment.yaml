@@ -17,6 +17,7 @@ spec:
       containers:
       - name: buyer-service
         image: systeamorg/buyer-service
+        imagePullPolicy: Always
         ports:
         - containerPort: 81
 
