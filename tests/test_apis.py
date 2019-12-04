@@ -85,8 +85,9 @@ class TestFunctions(unittest.TestCase):
                "role": "Buyer-Seller"
             }
 
+            data = json.loads(res.get_data(as_text=True))
             # Assert response
-            self.assertEqual(res.data, response)
+            self.assertEqual(data, response)
 
 
 if __name__ == '__main__':
