@@ -14,6 +14,7 @@ import mysql.connector as mysql
 class TestFunctions(unittest.TestCase):
 
     """Test case for the client methods."""
+    # Test of get_categories API
     def test_get_categories(self):
         with app.test_client() as c:
             res = c.get('/categories')
@@ -72,6 +73,20 @@ class TestFunctions(unittest.TestCase):
             # Assert response
             print(data)
             self.assertEqual(data, response)
+
+
+    # Test of get_user API
+    def test_get_user(self):
+        with app.test_client() as c:
+            res = c.get('/user?email=praveen.thakur@sjsu.edu')
+
+            # Passing the mock object
+            response = {
+               "role": "Buyer-Seller"
+            }
+
+            # Assert response
+            self.assertEqual(res, response)
 
 
 if __name__ == '__main__':
