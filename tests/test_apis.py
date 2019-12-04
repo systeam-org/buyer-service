@@ -14,7 +14,6 @@ import mysql.connector as mysql
 class TestFunctions(unittest.TestCase):
 
     """Test case for the client methods."""
-    # Test of get_categories API
     def test_get_categories(self):
         with app.test_client() as c:
             res = c.get('/categories')
@@ -74,6 +73,28 @@ class TestFunctions(unittest.TestCase):
             print(data)
             self.assertEqual(data, response)
 
+    # Test of place_order API
+    def test_place_order(self):
+        with app.test_client() as c:
+            data = {
+            "total_amount": 77,
+            "created_on": "2019-10-10 12:12:12",
+            "email" : "praveenthakur5@gmail.com",
+            "products":
+                [
+                    {
+                        "product_name" : "Closet",
+                        "product_id": 4,
+                        "quantity": 1,
+                        "unit_cost": 77
+                    }
+                ]
+            }
+            res = c.post('/placeorder', data=data)
+            # Passing the mock object
+            response = res.data
+            # Assert response
+            self.assertEqual(res.data, response)
 
     # Test of get_user API
     def test_get_user(self):
@@ -82,13 +103,12 @@ class TestFunctions(unittest.TestCase):
 
             # Passing the mock object
             response = {
-               "role": "Buyer-Seller"
+                "role": "Buyer-Seller"
             }
 
             data = json.loads(res.get_data(as_text=True))
             # Assert response
             self.assertEqual(data, response)
-
 
 if __name__ == '__main__':
     unittest.main()
