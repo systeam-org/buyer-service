@@ -18,7 +18,7 @@ class TestFunctions(unittest.TestCase):
     # Test of get_orders API
     def test_get_orders(self):
         with app.test_client() as c:
-            res = c.get('/orders?email=seller@gmail.com')
+            res = c.get('/orders?email=praveen.thakur@sjsu.edu')
 
             # Passing the mock object
             response = []
@@ -30,7 +30,7 @@ class TestFunctions(unittest.TestCase):
     # Test of get_products API
     def test_get_products(self):
         with app.test_client() as c:
-            res = c.get('/products?email=abc@gmail.com')
+            res = c.get('/products?email=praveen.thakur@sjsu.edu')
 
             # Passing the mock object
             response = []
