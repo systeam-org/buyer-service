@@ -86,7 +86,7 @@ class TestFunctions(unittest.TestCase):
             }
 
             # Assert response
-            self.assertEqual(res, response)
+            self.assertEqual(res.data, response)
 
 
 if __name__ == '__main__':
