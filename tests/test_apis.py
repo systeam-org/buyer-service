@@ -73,29 +73,6 @@ class TestFunctions(unittest.TestCase):
             print(data)
             self.assertEqual(data, response)
 
-    # Test of place_order API
-    def test_place_order(self):
-        with app.test_client() as c:
-            data = {
-            "total_amount": 77,
-            "created_on": "2019-10-10 12:12:12",
-            "email" : "praveenthakur5@gmail.com",
-            "products":
-                [
-                    {
-                        "product_name" : "Closet",
-                        "product_id": 4,
-                        "quantity": 1,
-                        "unit_cost": 77
-                    }
-                ]
-            }
-            res = c.post('/placeorder', data=data)
-            # Passing the mock object
-            response = res.data
-            # Assert response
-            self.assertEqual(res.data, response)
-
     # Test of get_user API
     def test_get_user(self):
         with app.test_client() as c:
