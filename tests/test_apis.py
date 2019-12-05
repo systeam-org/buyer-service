@@ -21,7 +21,7 @@ class TestFunctions(unittest.TestCase):
 
             # Passing the mock object
             response = "Hello world"
-            data = json.loads(res.get_data(as_text=True))
+            data = json.loads(res.get_data())
             # Assert response
             print(data)
             self.assertEqual(data, response)
