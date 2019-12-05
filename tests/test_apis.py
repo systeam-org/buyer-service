@@ -18,13 +18,13 @@ class TestFunctions(unittest.TestCase):
     def test_hello(self):
         with app.test_client() as c:
             res = c.get('/hello')
-
+            print(res.data)
             # Passing the mock object
             response = "Hello world"
-            data = json.loads(res.get_data())
+
             # Assert response
-            print(data)
-            self.assertEqual(data, response)
+
+            self.assertEqual(res.data, response)
 
     # Test of get_categories API
     def test_get_categories(self):
